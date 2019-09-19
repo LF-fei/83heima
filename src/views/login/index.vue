@@ -25,6 +25,7 @@
 </template>
 
 <script>
+
 export default {
 
   data () {
@@ -48,9 +49,21 @@ export default {
 
   methods: {
     submitForm () {
-      this.$refs.myForm.validate(function (isOk) {
+      this.$refs.myForm.validate((isOk) => {
         if (isOk) {
-          console.log('ok')
+          this.$axios({
+            url: '/authorizations',
+            method: 'post',
+            data: this.loginForm
+          }).then(result => {
+            window.localStorage.setItem('user-token', result.data.data.token)
+            this.$router.push('/')
+          }).catch(() => {
+            this.$message({
+              type: 'warning',
+              message: '手机号或者验证码输入错误'
+            })
+          })
         }
       })
     }
