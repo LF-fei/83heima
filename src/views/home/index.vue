@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-aside>
-       左侧内容
+        <layout-left></layout-left>
     </el-aside>
       <el-container>
         <el-header>头部</el-header>
@@ -16,10 +16,10 @@
 </template>
 
 <script>
-
+import layoutLeft from '../../components/home/layout-left'
 export default {
   components: {
-
+    'layout-left': layoutLeft
   }
 }
 </script>
