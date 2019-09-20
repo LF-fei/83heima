@@ -4,10 +4,10 @@
         <i class="el-icon-s-unfold"></i>
         <span class="title">江苏传智播客教育科股份有限公司</span></el-col>
     <el-col :span="4">
-        <img src="../../assets/avatar.jpg"  class="layout-img" alt="">
+        <img :src="user.photo ? user.photo  : userImg "  class="layout-img" alt="">
          <el-dropdown trigger="click">
        <span class="el-dropdown-link">
-        小仙女<i class="el-icon-arrow-down el-icon--right"></i>
+        {{user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-s-check">个人信息</el-dropdown-item>
@@ -23,7 +23,26 @@
 
 <script>
 export default {
-
+  data () {
+    return {
+      user: {},
+      userImg: require('../../assets/avatar.jpg')
+    }
+  },
+  methods: {
+    getUser () {
+      let token = window.localStorage.getItem('user-token')
+      this.$axios({
+        url: '/user/profile',
+        headers: { 'Authorization': `Bearer ${token}` }
+      }).then(result => {
+        this.user = result.data.data
+      })
+    }
+  },
+  created () {
+    this.getUser()
+  }
 }
 </script>
 

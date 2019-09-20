@@ -19,12 +19,10 @@
 </template>
 
 <script>
-// import layoutLeft from '../../components/home/layout-left'
-// import layoutHeader from '../../components/home/layout-header'
+
 export default {
   components: {
-    // 'layout-left': layoutLeft,
-    // 'layout-header': layoutHeader
+
   }
 }
 </script>
