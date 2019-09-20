@@ -8,7 +8,7 @@
           <layout-header></layout-header>
 
         </el-header>
-          <el-main>容器
+          <el-main style="padding:0px">
             <!-- 二级容器 -->
           <router-view></router-view>
           </el-main>
