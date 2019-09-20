@@ -40,7 +40,7 @@ export default {
     },
     CommandClick (key) {
       if (key === 'account') {
-        console.log(1)
+        this.$router.push('/home/account')
       } else if (key === 'git') {
         window.location.href = 'http://www.baidu.com'
       } else {
