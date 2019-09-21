@@ -2,7 +2,6 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 import router from '../permission'
 axios.interceptors.request.use(function (config) {
-  debugger
   // 在发起请求请做一些业务处理
   // config是要发送请求的配置信息
   let token = window.localStorage.getItem('user-token') // 获取token

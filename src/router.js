@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/home/index'
 import Login from './views/login/index'
 import Main from './views/home/main'
+
 Vue.use(Router)
 
 export default new Router({
@@ -19,6 +20,10 @@ export default new Router({
         {
           path: '',
           component: Main
+        },
+        {
+          path: '/home/comment',
+          component: () => import('./views/comment')
         }
       ]
     },
