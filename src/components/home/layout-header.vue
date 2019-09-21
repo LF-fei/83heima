@@ -30,12 +30,11 @@ export default {
   },
   methods: {
     getUser () {
-      let token = window.localStorage.getItem('user-token')
       this.$axios({
-        url: '/user/profile',
-        headers: { 'Authorization': `Bearer ${token}` }
+        url: '/user/profile'
+
       }).then(result => {
-        this.user = result.data.data
+        this.user = result.data
       })
     },
     CommandClick (key) {

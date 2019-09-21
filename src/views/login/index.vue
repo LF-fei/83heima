@@ -56,13 +56,8 @@ export default {
             method: 'post',
             data: this.loginForm
           }).then(result => {
-            window.localStorage.setItem('user-token', result.data.data.token)
+            window.localStorage.setItem('user-token', result.data.token)
             this.$router.push('/')
-          }).catch(() => {
-            this.$message({
-              type: 'warning',
-              message: '手机号或者验证码输入错误'
-            })
           })
         }
       })
