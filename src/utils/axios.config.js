@@ -1,6 +1,12 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import router from '../permission'
+import jsonBigInt from 'json-bigint'
+
+axios.defaults.transformResponse = [function (data) {
+  // data 是响应回来的字符串
+  return jsonBigInt.parse(data)
+}]
 axios.interceptors.request.use(function (config) {
   // 在发起请求请做一些业务处理
   // config是要发送请求的配置信息
@@ -39,7 +45,7 @@ axios.interceptors.response.use(function (response) {
     default:
       break
   }
-  Message({ message })
+  Message({ message, type: 'warning' })
   //   希望 在异常处理函数中将所有的错误都处理完毕 不再进入catch  终止错误
   return new Promise(function () {}) // 终止当前的错误
 })
