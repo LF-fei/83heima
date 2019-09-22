@@ -1,5 +1,10 @@
 <template>
-<el-card  v-loading="loading"  element-loading-text="拼命加载中" element-loading-background="rgba(0, 0, 0, 0.8)">
+<el-card   v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+
+    style="width: 100%">
   <!-- 面包屑 -->
   <bread-crumb slot="header">
     <template slot="title">评论列表</template>
