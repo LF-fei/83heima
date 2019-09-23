@@ -31,7 +31,7 @@ export default new Router({
         },
         {
           path: '/home/articles',
-          component: () => import('./views/articles')
+          component: () => import('./views/articless')
         }
       ]
     },
