@@ -7,24 +7,28 @@
     <el-form>
       <!-- 文章状态 -->
       <el-form-item label="文章状态">
-        <el-radio-group>
-          <el-radio>全部</el-radio>
-          <el-radio>草稿</el-radio>
-          <el-radio>待审核</el-radio>
-          <el-radio>审核通过</el-radio>
-          <el-radio>审核失败</el-radio>
+        <el-radio-group @change='changeCondition' v-model="formData.status">
+          <el-radio :label="5">全部</el-radio>
+          <el-radio :label="0">草稿</el-radio>
+          <el-radio :label="1">待审核</el-radio>
+          <el-radio :label="2">审核通过</el-radio>
+          <el-radio :label="3">审核失败</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="频道列表">
         <el-radio-group>
-          <el-select></el-select>
+          <el-select @change="changeCondition" v-model='formData.channel_id'>
+            <el-option v-for='item in channels' :key='item.id' :label='item.name' :value='item.id'></el-option>
+          </el-select>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="时间列表">
         <el-radio-group>
           <el-date-picker
+           v-model="formData.date"
             type="daterange"
             range-separator="-"
+            value-format='yyyy-MM-dd'
             start-placeholder="开始日期"
             end-placeholder="结束日期"
           ></el-date-picker>
@@ -32,7 +36,7 @@
       </el-form-item>
     </el-form>
     <!-- 文章列表 -->
-    <div class="total">共找到55078条符合条件的内容</div>
+    <div class="total">共找到{{page.total}}条符合条件的内容</div>
     <div v-for='(item,index) in list' :key='index' class="header">
       <!-- 左侧 -->
       <div class="left">
@@ -53,6 +57,17 @@
         </span>
       </div>
     </div>
+    <el-row type="flex" justify='center' style="margin-top:20px">
+      <el-pagination
+  background
+  layout="prev, pager, next"
+  @current-change="changePage"
+  :page-size="page.pageSize"
+  :current-page="page.currentPage"
+  :total="page.total">
+</el-pagination>
+    </el-row>
+
   </el-card>
 </template>
 
@@ -60,24 +75,66 @@
 export default {
   data () {
     return {
+      formData: {
+        status: 5,
+        channel_id: null,
+        date: []
+      },
       list: [],
-      defaultImg: require('../../assets/01.jpeg')
+      defaultImg: require('../../assets/01.jpeg'),
+      channels: [],
+      page: {
+        total: 0,
+        currentPage: 1,
+        pageSize: 10
+      }
     }
   },
   methods: {
+    // 状态变化时件
+    changeCondition () {
+      this.page.currentPage = 1
+      this.quwryArticles()
+    },
+    // 切换页码
+    changePage (newPage) {
+      this.page.currentPage = newPage
+      this.quwryArticles()
+    },
     //  获取文章列表
-    getArticles () {
+    getArticles (params) {
       this.$axios({
-        url: '/articles'
+        url: '/articles',
+        params
       }).then(result => {
-        console.log(result.data)
-
+        this.page.total = result.data.total_count
         this.list = result.data.results
+      })
+    },
+    quwryArticles () {
+      let params = {
+        status: this.formData.status === 5 ? null : this.formData.status,
+        channel_id: this.formData.channel_id,
+        begin_pubdate: this.formData.date.length ? this.formData.date.length[0] : null,
+        end_pubdate: this.formData.date.length > 1 ? this.formData.date.length[1] : null,
+        page: this.page.currentPage,
+        per_page: this.page.pageSize
+      }
+      this.getArticles(params)
+    },
+    // 获取频道列表的内容
+    getchannels () {
+      this.$axios({
+        url: '/channels'
+      }).then(result => {
+        this.channels = result.data.channels
       })
     }
   },
+
   created () {
     this.getArticles()
+    this.getchannels()
   },
   // 过滤器
   filters: {
