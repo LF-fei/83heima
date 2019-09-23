@@ -12,7 +12,7 @@ export default {
 
 <style scoped>
 .layout-main{
-    background-image: url("../../assets/古典3.jpg");
+    background-image: url("../../assets/004.jpg");
     height:100vh;
     background-size: cover;
 }

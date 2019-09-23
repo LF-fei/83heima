@@ -5,7 +5,7 @@ import jsonBigInt from 'json-bigint'
 
 axios.defaults.transformResponse = [function (data) {
   // data 是响应回来的字符串
-  return jsonBigInt.parse(data)
+  return data ? jsonBigInt.parse(data) : ''
 }]
 axios.interceptors.request.use(function (config) {
   // 在发起请求请做一些业务处理

@@ -12,14 +12,17 @@
     <el-upload class="too-upload" action='' :http-request="uploadImg"  :show-file-list= 'false'>
         <el-button type="primary">点我上传</el-button>
     </el-upload>
+
     <el-tabs v-model="activeName" @tab-click="changeTeb">
       <el-tab-pane label="全部" name="all">
         <div class="img-list">
           <el-card v-for="item in list" :key="item.id" class="img-item">
             <img :src="item.url" alt />
             <div class="Icon">
-              <i class="el-icon-star-on" :style="{color:item. is_collected ? 'red' :'#000'}"></i>
-              <i class="el-icon-delete-solid"></i>
+              <!-- 收藏 -->
+              <i @click="cancel(item)" class="el-icon-star-on" :style="{color:item. is_collected ? 'red' :'#000'}"></i>
+              <!-- 删除 -->
+              <i class="el-icon-delete-solid" @click="delImg(item.id)"></i>
             </div>
           </el-card>
         </div>
@@ -65,6 +68,30 @@ export default {
     }
   },
   methods: {
+    // 取消或者收藏图片
+    cancel (item) {
+      let mess = item.is_collected ? '取消' : ''
+      this.$confirm(`你确定${mess}收藏该图片?`).then(() => {
+        this.$axios({
+          url: `/user/images/${item.id}`,
+          method: 'put',
+          data: { collect: !item.is_collected }
+        }).then(() => {
+          this.getImg()
+        })
+      })
+    },
+    // 删除素材
+    delImg (id) {
+      this.$confirm('你确定要删除这张图片吗？').then(() => {
+        this.$axios({
+          url: `/user/images/${id}`,
+          method: 'DELETE'
+        }).then(() => {
+          this.getImg()
+        })
+      })
+    },
     //   上传素材
     uploadImg (params) {
       const data = new FormData()
@@ -109,7 +136,7 @@ export default {
 .too-upload{
  position: absolute;
  right: 20px;
- margin-top:-10px;
+ margin-top:-8px;
 }
 .img-list {
   display: flex;
