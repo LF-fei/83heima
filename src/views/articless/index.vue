@@ -52,7 +52,7 @@
         <span>
           <i class="el-icon-edit"></i>修改
        </span>
-        <span>
+        <span @click="dele(item.id)">
           <i class="el-icon-delete"></i>删除
         </span>
       </div>
@@ -91,6 +91,17 @@ export default {
     }
   },
   methods: {
+    // 删除素材
+    dele (id) {
+      this.$confirm('你确定删除这篇文章么').then(() => {
+        this.$axios({
+          url: `/articles/${id.toString()}`,
+          method: 'delete'
+        }).then(() => {
+          this.quwryArticles()
+        })
+      })
+    },
     // 状态变化时件
     changeCondition () {
       this.page.currentPage = 1
