@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <bread-crumb slot="header">
-      <template slot="title">列表</template>
+      <template slot="title">文章列表</template>
     </bread-crumb>
     <!-- 表单 -->
     <el-form>
