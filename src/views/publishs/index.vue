@@ -31,8 +31,8 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button @click="publish" type="primary">发布文章</el-button>
-        <el-button>存入草稿</el-button>
+        <el-button @click="publish(fales)" type="primary">发布文章</el-button>
+        <el-button @click='publish(true)'>存入草稿</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -62,14 +62,14 @@ export default {
   },
   methods: {
     //   发布文章
-    publish () {
+    publish (draft) {
       this.$refs.publishForm.validate((isOk) => {
         if (isOk) {
           this.$axios({
             url: '/articles',
             method: 'post',
             data: this.formData,
-            params: { draft: false }
+            params: { draft }
           }).then(() => {
             this.$router.push('/home/articles')
           })

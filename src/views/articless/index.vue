@@ -49,7 +49,7 @@
       </div>
       <!-- 右侧 -->
       <div class="right">
-        <span>
+        <span @click="goEdit(item.id)">
           <i class="el-icon-edit"></i>修改
        </span>
         <span @click="dele(item.id)">
@@ -91,6 +91,10 @@ export default {
     }
   },
   methods: {
+    // 点击修改跳转到修改页面
+    goEdit (id) {
+      this.$router.push(`/home/publish/${id.toString()}`)
+    },
     // 删除素材
     dele (id) {
       this.$confirm('你确定删除这篇文章么').then(() => {
