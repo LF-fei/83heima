@@ -4,23 +4,29 @@
       <template slot="title">发布文章</template>
     </bread-crumb>
     <!-- 表单 -->
-    <el-form ref='publishForm' :model="formData" :rules="rulesData" style="margin-left:100px" label-width="100px">
+    <el-form
+      ref="publishForm"
+      :model="formData"
+      :rules="rulesData"
+      style="margin-left:100px"
+      label-width="100px"
+    >
       <el-form-item prop="title" label="标题">
         <el-input v-model="formData.title" style="width:400px"></el-input>
       </el-form-item>
       <el-form-item prop="content" label="内容">
         <el-input v-model="formData.content" type="textarea" :rows="4" placeholder="请输入内容"></el-input>
       </el-form-item>
-      <el-form-item prop='cover' label="封面">
-        <el-radio-group v-model='formData.cover.type'>
-          <el-radio :label='1'>单图</el-radio>
-          <el-radio :label='3'>三图</el-radio>
-          <el-radio :label='0'>无图</el-radio>
-          <el-radio :label='-1'>自动</el-radio>
+      <el-form-item prop="cover" label="封面">
+        <el-radio-group v-model="formData.cover.type">
+          <el-radio :label="1">单图</el-radio>
+          <el-radio :label="3">三图</el-radio>
+          <el-radio :label="0">无图</el-radio>
+          <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item prop="channel_id" label="频道">
-        <el-select  v-model='formData.channel_id'>
+        <el-select v-model="formData.channel_id">
           <el-option
             :model="formData.channel_id"
             v-for=" item in channels"
@@ -31,8 +37,8 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button @click="publish(fales)" type="primary">发布文章</el-button>
-        <el-button @click='publish(true)'>存入草稿</el-button>
+        <el-button @click="publish(false)" type="primary">发布文章</el-button>
+        <el-button @click="publish(true)">存入草稿</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -54,25 +60,48 @@ export default {
       },
       // 校验规则
       rulesData: {
-        title: [{ required: true, message: '标题不能为空' }, { min: 5, max: 30, message: '标题长度在5-30个字符' }],
+        title: [
+          { required: true, message: '标题不能为空' },
+          { min: 5, max: 30, message: '标题长度在5-30个字符' }
+        ],
         content: [{ required: true, message: '内容不能为空' }],
         channel_id: [{ required: true, message: '频道不能为空' }]
       }
     }
   },
   methods: {
+    //   根据id获取文章信息
+    getArticleById (articleId) {
+      this.$axios({
+        url: `/articles/${articleId}`
+      }).then(result => {
+        this.formData = result.data
+      })
+    },
     //   发布文章
     publish (draft) {
-      this.$refs.publishForm.validate((isOk) => {
+      this.$refs.publishForm.validate(isOk => {
         if (isOk) {
-          this.$axios({
-            url: '/articles',
-            method: 'post',
-            data: this.formData,
-            params: { draft }
-          }).then(() => {
-            this.$router.push('/home/articles')
-          })
+          let { articleId } = this.$route.params
+          if (articleId) {
+            this.$axios({
+              url: `/articles/${articleId}`,
+              method: 'put',
+              data: this.formData,
+              params: { draft }
+            }).then(() => {
+              this.$router.push('/home/articles')
+            })
+          } else {
+            this.$axios({
+              url: '/articles',
+              method: 'post',
+              data: this.formData,
+              params: { draft }
+            }).then(() => {
+              this.$router.push('/home/articles')
+            })
+          }
         }
       })
     },
@@ -87,6 +116,8 @@ export default {
   },
   created () {
     this.getChannels()
+    let { articleId } = this.$route.params
+    articleId && this.getArticleById(articleId)
   }
 }
 </script>
