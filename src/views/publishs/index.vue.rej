@@ -1,0 +1,50 @@
+diff a/src/views/publishs/index.vue b/src/views/publishs/index.vue	(rejected hunks)
+@@ -78,2 +78,2 @@ export default {
+-        this.formData = result.data;
+-      });
++        this.formData = result.data
++      })
+@@ -85 +85 @@ export default {
+-          let { articleId } = this.$route.params;
++          let { articleId } = this.$route.params
+@@ -87 +87 @@ export default {
+-           this.$axios({
++            this.$axios({
+@@ -89,2 +89,2 @@ export default {
+-               method: "put",
+-               data: this.formData,
++              method: 'put',
++              data: this.formData,
+@@ -92,2 +92,2 @@ export default {
+-           }).then(() => {
+-              this.$router.push("/home/articles");
++            }).then(() => {
++              this.$router.push('/home/articles')
+@@ -95,2 +95 @@ export default {
+-          
+-          }  else {
++          } else {
+@@ -98,2 +97,2 @@ export default {
+-              url: "/articles",
+-              method: "post",
++              url: '/articles',
++              method: 'post',
+@@ -103,2 +102,2 @@ export default {
+-              this.$router.push("/home/articles");
+-            });
++              this.$router.push('/home/articles')
++            })
+@@ -114,2 +113,2 @@ export default {
+-        this.channels = result.data.channels;
+-      });
++        this.channels = result.data.channels
++      })
+@@ -118,4 +117,4 @@ export default {
+-  created() {
+-    this.getChannels();
+-    let { articleId } = this.$route.params;
+-    articleId && this.getArticleById(articleId);
++  created () {
++    this.getChannels()
++    let { articleId } = this.$route.params
++    articleId && this.getArticleById(articleId)

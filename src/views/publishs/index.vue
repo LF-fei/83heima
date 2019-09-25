@@ -15,9 +15,9 @@
         <el-input v-model="formData.title" style="width:400px"></el-input>
       </el-form-item>
       <el-form-item prop="content" label="内容">
-        <el-input v-model="formData.content" type="textarea" :rows="4" placeholder="请输入内容"></el-input>
+        <quill-editor v-model="formData.content"  style="height:300px"></quill-editor>
       </el-form-item>
-      <el-form-item prop="cover" label="封面">
+      <el-form-item prop="cover" label="封面" style="margin-top:120px">
         <el-radio-group v-model="formData.cover.type">
           <el-radio :label="1">单图</el-radio>
           <el-radio :label="3">三图</el-radio>
@@ -83,25 +83,14 @@ export default {
       this.$refs.publishForm.validate(isOk => {
         if (isOk) {
           let { articleId } = this.$route.params
-          if (articleId) {
-            this.$axios({
-              url: `/articles/${articleId}`,
-              method: 'put',
-              data: this.formData,
-              params: { draft }
-            }).then(() => {
-              this.$router.push('/home/articles')
-            })
-          } else {
-            this.$axios({
-              url: '/articles',
-              method: 'post',
-              data: this.formData,
-              params: { draft }
-            }).then(() => {
-              this.$router.push('/home/articles')
-            })
-          }
+          this.$axios({
+            url: articleId ? `/articles/${articleId}` : '/articles',
+            method: articleId ? 'put' : 'post',
+            data: this.formData,
+            params: { draft }
+          }).then(() => {
+            this.$router.push('/home/articles')
+          })
         }
       })
     },
@@ -115,10 +104,12 @@ export default {
     }
   },
   created () {
+    // console.log(3)
     this.getChannels()
     let { articleId } = this.$route.params
     articleId && this.getArticleById(articleId)
   }
+
 }
 </script>
 
