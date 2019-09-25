@@ -40,6 +40,10 @@ export default new Router({
         {
           path: 'publish',
           component: () => import('./views/publishs')
+        },
+        {
+          path: 'account',
+          component: () => import('./views/account')
         }
       ]
     },
