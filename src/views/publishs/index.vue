@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card v-loading='loading'>
     <bread-crumb slot="header">
       <template slot="title">发布文章</template>
     </bread-crumb>
@@ -25,7 +25,7 @@
           <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
       </el-form-item>
-        <cover-image :image='formData.cover.images'></cover-image>
+        <cover-image @selectImg='changeImg' :image='formData.cover.images'></cover-image>
       <el-form-item prop="channel_id" label="频道">
         <el-select v-model="formData.channel_id">
           <el-option
@@ -49,6 +49,7 @@
 export default {
   data () {
     return {
+      loading: false,
       channels: [],
       formData: {
         title: '',
@@ -59,6 +60,7 @@ export default {
           images: []
         }
       },
+
       // 校验规则
       rulesData: {
         title: [
@@ -71,6 +73,10 @@ export default {
     }
   },
   methods: {
+    // 接受子组件传来的值
+    changeImg (url, index) {
+      this.formData.cover.images = this.formData.cover.images.map((item, i) => i === index ? url : item)
+    },
     // 封面类型发生改变时
     changeType () {
       // 封面类型 -1:自动，0-无图，1-1张，3-3张
@@ -84,10 +90,12 @@ export default {
     },
     //   根据id获取文章信息
     getArticleById (articleId) {
+      this.loading = true
       this.$axios({
         url: `/articles/${articleId}`
       }).then(result => {
         this.formData = result.data
+        this.loading = false
       })
     },
     //   发布文章
